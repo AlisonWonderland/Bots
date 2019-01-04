@@ -16,12 +16,12 @@ def extractNumber(feetString):
 
     convertToMeter(int(feet))
 
-def findFeet(sentence):
+def findFeet(comment):
     ftRegex = re.compile('[0-9]+ ft')
     feetRegex = re.compile('[0-9]+ feet')
     
-    ftMatch = ftRegex.search(sentence)
-    feetMatch = feetRegex.search(sentence)
+    ftMatch = ftRegex.search(comment)
+    feetMatch = feetRegex.search(comment)
     
     if (ftMatch == None and feetMatch == None):
         return
