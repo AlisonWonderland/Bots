@@ -2,6 +2,7 @@
 
 import praw
 import re
+import os
 
 def convertToMeter(feet):
     meters = feet * 3.28084
@@ -33,8 +34,17 @@ def findFeetRegex(comment): #Finding if there is some text saying '# ft/feet' in
         extractNumber(feetMatch.group())
 
 def idListFill(): #Adding the id's stored in a text file to idList
-    idList = []
-
+    if not os.path.isfile("comments_replied_to.txt"):
+        idList = []
+    
+    else:
+        with open("comments_replied_to.txt", "r") as f:
+            idList = f.read()
+            idList = idList.split("\n")
+            idList = list(filter(None, idList)) #Making sure  there are no empty values stored in the list
+    
+    return idList
+    
 def main():
     reddit = praw.Reddit('bot1')
     subreddit = reddit.subreddit('diariesfrom_me')
@@ -42,8 +52,12 @@ def main():
     
     for submission in subreddit.hot(limit = 25):
         for comment in submission.comments:
-            if(comment.id() not in idList):
-                #add to list file
-                findFeetRegex(comment)
+            if(comment.id not in idList):
+                findFeetRegex(comment.body) #add returns to functions
+                idList.append(comment.id)
+    
+    with open("comments_replied_to.txt", "w") as f:
+        for comment_id in idList:
+            f.write(comment_id + "\n")
 
 main()
