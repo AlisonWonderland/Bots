@@ -6,6 +6,7 @@ import os
 
 def convertToMeter(feet):
     meters = feet * 3.28084
+    return meters
 
 def extractNumber(feetString): #Extracting number(#) from the regular expression: '# ft/feet' and then sending number to conversion
     feet = ''
@@ -15,7 +16,7 @@ def extractNumber(feetString): #Extracting number(#) from the regular expression
         feet += feetString[i]
         i += 1
 
-    convertToMeter(int(feet))
+    return convertToMeter(int(feet))
 
 def findFeetRegex(comment): #Finding if there is some text saying '# ft/feet' in the comment and then sending it to extractNumber
     ftRegex = re.compile('[0-9]+ ft')
@@ -28,10 +29,10 @@ def findFeetRegex(comment): #Finding if there is some text saying '# ft/feet' in
         return
     
     elif (ftMatch != None):
-        extractNumber(ftMatch.group())
+       return extractNumber(ftMatch.group())
     
     else: #means feetMatch !=None
-        extractNumber(feetMatch.group())
+        return extractNumber(feetMatch.group())
 
 def idListFill(): #Adding the id's stored in a text file to idList
     if not os.path.isfile("comments_replied_to.txt"):
@@ -53,7 +54,7 @@ def main():
     for submission in subreddit.hot(limit = 25):
         for comment in submission.comments:
             if(comment.id not in idList):
-                findFeetRegex(comment.body) #add returns to functions
+                comment.reply(findFeetRegex(comment.body)) #add returns to functions
                 idList.append(comment.id)
     
     with open("comments_replied_to.txt", "w") as f:
