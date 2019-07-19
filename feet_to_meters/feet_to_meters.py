@@ -48,7 +48,7 @@ def idListFill(): #Adding the id's stored in a text file to idList
     
 def main():
     reddit = praw.Reddit('bot1')
-    subreddit = reddit.subreddit('diariesfrom_me')
+    subreddit = reddit.subreddit('')#Insert subreddit name here
     idList = idListFill()
     
     for submission in subreddit.hot(limit = 25):
